@@ -50,7 +50,6 @@ export default function TabWidget() {
     const [value, setValue] = React.useState(0);
     const [categories, setCategories] = useState([])
     const [dishList, setDishList] = useState([])
-    const [cartCount, setCartCount] = useState(0)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -58,7 +57,6 @@ export default function TabWidget() {
     };
 
     const handleChangeIndex = (index) => {
-        console.log('vanneeee');
         setValue(index);
     };
 
@@ -69,13 +67,11 @@ export default function TabWidget() {
                 const data = response.data[0]
                 setCategories(data.table_menu_list)
                 setDishList(data.table_menu_list.map((category) => category.category_dishes))
-                // setDishList(data.table_menu_list[0].category_dishes)
             })
             .catch((error) => {
                 console.log(error);
             });
     }, [categories, dishList]);
-
 
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
@@ -100,7 +96,7 @@ export default function TabWidget() {
                 {dishList.map((categoryDishes, index) => (
                     <TabPanel key={categoryDishes.menu_category_id} value={value} index={index} dir={theme.direction}>
                         {categoryDishes.map((dish, index) => (
-                            <DishItem dish={dish}   />
+                            <DishItem dish={dish} />
                         ))}
                     </TabPanel>
                 ))}
