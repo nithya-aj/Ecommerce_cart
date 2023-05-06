@@ -85,7 +85,13 @@ export default function TabWidget() {
                     aria-label="full width tabs example"
                     visibleScrollbar={true}
                 >
-                    {categories.map((category, index) => (<Tab label={category.menu_category} key={category.menu_category_id} {...a11yProps(index)} sx={{ width: '23rem' }} />))}
+                    {categories.map((category, index) => (<Tab label={category.menu_category} key={category.menu_category_id} {...a11yProps(index)}
+                        sx={{
+                            width: '13rem',
+                            [theme.breakpoints.up('md')]: {
+                                width: '23rem',
+                            },
+                        }} />))}
                 </Tabs>
             </AppBar>
             <SwipeableViews
