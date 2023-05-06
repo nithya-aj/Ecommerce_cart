@@ -1,8 +1,8 @@
 # Food Ordering App
 
-This is a food ordering app that fetches data from an API and displays the available dishes and their categories. The user can select a dish, customize it (if available), and add it to the cart.
+This is a food ordering app that fetches data from an API and displays the available dishes and their categories. 
 
-![](/client/public/cartPage.png)
+![cartPage](/client/public/cartPage.png)
 
 ## Features
 - Display dishes and categories fetched from an API
