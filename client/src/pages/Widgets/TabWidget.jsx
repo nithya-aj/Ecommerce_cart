@@ -7,10 +7,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import IconCmp from 'Components/IconCmp';
-import { Button, ButtonGroup, Divider } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import DishItem from './DishItem';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -51,19 +50,16 @@ export default function TabWidget() {
     const [value, setValue] = React.useState(0);
     const [categories, setCategories] = useState([])
     const [dishList, setDishList] = useState([])
-
+    const [cartCount, setCartCount] = useState(0)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
         console.log(newValue);
-        setDishList(categories[newValue].category_dishes)
     };
 
     const handleChangeIndex = (index) => {
         console.log('vanneeee');
         setValue(index);
-        setDishList(categories[index].category_dishes)
-        console.log(index);
     };
 
     React.useEffect(() => {
@@ -72,8 +68,8 @@ export default function TabWidget() {
             .then((response) => {
                 const data = response.data[0]
                 setCategories(data.table_menu_list)
-                // setDishList(data.table_menu_list.map((category) => category.category_dishes))
-                setDishList(data.table_menu_list[0].category_dishes)
+                setDishList(data.table_menu_list.map((category) => category.category_dishes))
+                // setDishList(data.table_menu_list[0].category_dishes)
             })
             .catch((error) => {
                 console.log(error);
@@ -101,47 +97,10 @@ export default function TabWidget() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-                {categories.map((category, index) => (
-                    <TabPanel key={category.menu_category_id} value={value} index={index} dir={theme.direction}>
-                        {dishList.map((dish, index) => (
-                            <Box key={dish.dish_id} container spacing={2} sx={{ px: '1rem', flexGrow: 1, display: 'flex' }}>
-                                <Box gap={2} item xs={9.5} sx={{ display: 'flex', flexGrow: 4 }}>
-                                    {dish.dish_Type === 1 ?
-                                        (<Box>
-                                            <IconCmp color={'red'} />
-                                        </Box>) :
-                                        (<Box>
-                                            <IconCmp color={'green'} />
-                                        </Box>)
-                                    }
-                                    <Box>
-                                        <Typography sx={{ fontWeight: '500' }}>{dish.dish_name}</Typography>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginRight: "1rem" }}>
-                                            <Typography sx={{ fontSize: '14px', fontWeight: '500' }}>{dish.dish_currency} {dish.dish_price}</Typography>
-                                            <Typography sx={{ display: { xs: 'block', sm: 'block', md: 'none' } }}>{dish.dish_calories} Calories</Typography>
-
-                                        </Box>
-                                        <Typography color='GrayText' variant='subtitle2'>{dish.description}</Typography>
-                                        <Box sx={{ my: '8px' }}>
-                                            <ButtonGroup variant="contained" aria-label="outlined primary button group" sx={{ borderRadius: '20px' }}>
-                                                <Button sx={{ backgroundColor: 'green', borderRadius: '20px', width: '2.7rem', height: '2rem' }}>-</Button>
-                                                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '2.7rem', backgroundColor: 'green', color: 'white' }}><Typography>0</Typography></Box>
-                                                <Button sx={{ backgroundColor: 'green', borderRadius: '20px', width: '2.7rem', height: '2rem' }}>+</Button>
-                                            </ButtonGroup>
-                                        </Box>
-                                        {dish.addonCat?.length > 0 && (<Typography color='error' variant='subtitle2'>Customization available</Typography>)}
-                                    </Box>
-                                </Box>
-                                <Box item xs={1} sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center ', flexGrow: 1 }}>
-                                    <Typography>{dish.dish_calories} Calories</Typography>
-                                </Box>
-                                <Box item xs={1.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                    <Box>
-                                        <img src={dish.dish_image} height='100' width='100' alt="" style={{ borderRadius: "12px" }} />
-                                    </Box>
-                                </Box>
-                                <Divider sx={{ mx: '1rem' }}></Divider>
-                            </Box>
+                {dishList.map((categoryDishes, index) => (
+                    <TabPanel key={categoryDishes.menu_category_id} value={value} index={index} dir={theme.direction}>
+                        {categoryDishes.map((dish, index) => (
+                            <DishItem dish={dish}   />
                         ))}
                     </TabPanel>
                 ))}
